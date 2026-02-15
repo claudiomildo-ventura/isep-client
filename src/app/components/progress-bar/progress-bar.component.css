@@ -1,12 +1,25 @@
 .progress-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.7);  /* Semi-transparent white background */
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
     display: flex;
-    justify-content: center;   /* Center horizontally */
-    align-items: center;       /* Center vertically */
-    z-index: 1000;             /* Ensure it stays above other content */
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.spinner-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    /* optional card-like backdrop */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 16px 20px;
+    border-radius: 12px;
+}
+
+.spinner-text {
+    font-weight: 600;
+    color: #1a73e8; /* align with primary */
 }

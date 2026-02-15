@@ -1,6 +1,7 @@
 import {CommonModule} from "@angular/common";
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MaterialModule} from "src/app/material.module";
+import {PROGRESS_BAR} from "src/config/progress-bar";
 
 @Component({
     selector: 'progress-bar',
@@ -22,19 +23,29 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this.interval) {
-            clearInterval(this.interval);
-        }
+        this.progressBarDestroyConfig();
     }
 
     private progressBarInitialize(): void {
         this.interval = setInterval((): void => {
-            if (this.progressValue < 100) {
-                this.progressValue += 10;
+            this.progressBarLoadConfig();
+        }, PROGRESS_BAR.delay);
+    }
+
+    private progressBarLoadConfig(): void {
+        this.interval = setInterval((): void => {
+            if (this.progressValue < PROGRESS_BAR.progressMaxValue) {
+                this.progressValue += PROGRESS_BAR.progressIncrementValue;
             } else {
                 clearInterval(this.interval);
                 this.isPageLoading = false;
             }
-        }, 30);
+        }, PROGRESS_BAR.delay);
+    }
+
+    private progressBarDestroyConfig(): void {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
     }
 }
