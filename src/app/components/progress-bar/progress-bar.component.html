@@ -1,3 +1,12 @@
 <div *ngIf="isPageLoading" class="progress-overlay">
-    <mat-progress-bar [value]="progressValue" mode="determinate" color="primary"></mat-progress-bar>
+    <div class="spinner-wrap" role="status" aria-live="polite" aria-label="Loading">
+        <mat-progress-spinner
+            [value]="progressValue"
+            mode="determinate"
+            color="primary"
+            diameter="64"
+            strokeWidth="6">
+        </mat-progress-spinner>
+        <div class="spinner-text" *ngIf="progressValue !== undefined">{{ progressValue }}%</div>
+    </div>
 </div>

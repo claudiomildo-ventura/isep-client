@@ -2,3 +2,32 @@
     display: flex;
     gap: 10px;
 }
+
+.fields-row {
+    min-height: 160px; /* set the desired height */
+    display: flex;
+    align-items: center; /* vertically center children */
+    gap: 16px; /* space between mat-form-fields */
+    flex-wrap: nowrap; /* keep everything on one line */
+    overflow-x: hidden; /* no horizontal scroll */
+}
+
+/* Make each field shrink to fit on one line */
+.fields-row mat-form-field {
+    flex: 1 1 0; /* allow grow and shrink */
+    min-width: 0; /* permit shrinking below intrinsic width */
+}
+
+/* Optional: reduce internal padding to gain space */
+.fields-row .mat-mdc-form-field-infix {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* Optional: truncate long labels to avoid overflow */
+.fields-row .mdc-floating-label,
+.fields-row .mat-mdc-form-field-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,9 @@
+.table-responsive {
+    max-height: 70vh; /* or 500px */
+    overflow: auto;
+}
+
+.mat-header-row {
+    background: white;
+    z-index: 1;
+}

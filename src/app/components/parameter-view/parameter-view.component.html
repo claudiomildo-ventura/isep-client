@@ -1,7 +1,7 @@
 <form [formGroup]="this.frm" (ngSubmit)="submit()">
     <mat-card>
         <mat-card-content class="mat-elevation-z0">
-            <div class="d-flex space-x-10">
+            <div class="d-flex space-x-10 fields-row">
 
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblArchitecture>{{ this.architecture().payload }}</mat-label>
