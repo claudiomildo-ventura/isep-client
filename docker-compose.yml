@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  isep_client:
+    build:
+      context: ..
+      dockerfile: docker/dockerfile
+    ports:
+      - "80:80"
+    container_name: isep_client

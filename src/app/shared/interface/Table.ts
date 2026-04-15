@@ -4,6 +4,6 @@ export interface Table {
     id: number;
     name: string;
     type: string;
-    isAutoCreated: boolean;
+    autoCreated: boolean;
     fields: Field[];
 }
