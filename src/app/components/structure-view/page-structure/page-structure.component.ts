@@ -94,13 +94,12 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
 
             // Call your existing selection logic
             this.toggleRow(field);
-            console.log('Space bar pressed on checkbox.');
+            TECHNICAL_LOGGER.info('Space bar pressed on checkbox.');
         }
 
         // Example 2: Do something else on the ENTER key
         if (event.key === 'Enter') {
-            console.log('Enter key pressed on checkbox.');
-            // Add your custom logic here
+            TECHNICAL_LOGGER.info('Enter key pressed on checkbox.');
         }
     }
 

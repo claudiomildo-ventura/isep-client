@@ -96,7 +96,7 @@ export class ParameterViewComponent implements OnInit {
 
     public async submit(): Promise<void> {
         if (this.frm.invalid) {
-            void this.dialogService.alert('Form inválido!');
+            void this.dialogService.alert('Invalid form!');
             return;
         }
 
@@ -123,7 +123,7 @@ export class ParameterViewComponent implements OnInit {
                 id: t.id,
                 name: t.name,
                 type: t.type,
-                isAutoCreated: t.isAutoCreated,
+                autoCreated: true,
                 fields: []
             };
 
@@ -151,6 +151,7 @@ export class ParameterViewComponent implements OnInit {
         }
 
         const archetypeGenerate: ArchetypeGenerate = {
+            autoCreated: true,
             architecture: this.frm.value.architectures,
             databasePlatform: this.frm.value.databasePlatforms,
             databaseEngineer: this.frm.value.databaseEngineers,
