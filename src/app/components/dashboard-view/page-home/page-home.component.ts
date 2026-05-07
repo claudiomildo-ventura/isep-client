@@ -4,7 +4,6 @@ import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators
 import {Router} from "@angular/router";
 import {ProgressBarComponent} from "src/app/components/progress-bar/progress-bar.component";
 import {ArchetypeService} from "src/app/core/services/archetype.service";
-import {DialogService} from "src/app/core/services/dialog.service";
 import {MaterialModule} from "src/app/material.module";
 import {ApiResponse} from "src/app/shared/interface/ApiResponse";
 import {NUMBER_CONSTANT} from "src/app/shared/NumberConstant";
