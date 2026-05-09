@@ -16,13 +16,11 @@ import {ROUTES} from "./app/app.route";
 import {ERROR_ROUTES} from "./app/core/error/error.route";
 import {TECHNICAL_LOGGER} from "./config/technical-logger";
 import {Interceptor} from "./app/core/interceptor/interceptor";
-import {provideAnimations} from '@angular/platform-browser/animations';
 
 export const ALL_ROUTES: Route[] = [...ROUTES, ...ERROR_ROUTES];
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideAnimations(),
         {
             provide: HTTP_INTERCEPTORS, useClass: Interceptor,
             multi: true
