@@ -1,4 +1,4 @@
-<div *ngIf="isPageLoading" class="progress-overlay">
+<div *ngIf="isPageLoading" class="progress-overlay" animate.enter="fade-in" animate.leave="fade-out">
     <div class="spinner-wrap" role="status" aria-live="polite" aria-label="Loading">
         <mat-progress-spinner
             [value]="progressValue"

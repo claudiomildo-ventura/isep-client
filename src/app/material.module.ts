@@ -1,7 +1,6 @@
 
 // src/app/material.module.ts
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 // CDK.
 import { A11yModule } from '@angular/cdk/a11y';
