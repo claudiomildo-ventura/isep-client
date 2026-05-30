@@ -23,7 +23,7 @@ export class PageEnterpriseComponent implements OnInit {
     @ViewChild('lblEnterprise') lblEnterprise!: ElementRef<HTMLParagraphElement>;
 
     ngOnInit(): void {
-        this.setEnterprise();
+        void this.setEnterprise();
     }
 
     private async setEnterprise(): Promise<void> {

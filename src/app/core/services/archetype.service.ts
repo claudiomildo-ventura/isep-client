@@ -13,35 +13,26 @@ export class ArchetypeService {
     private readonly httpclientService: HttpclientService = inject(HttpclientService);
 
     public async getMapping<T>(url: string): Promise<T> {
-        try {
-            const response = await firstValueFrom(
-                this.httpclientService
-                    .getMapping$<ApiResponse<T>>(url)
-                    .pipe(
-                        timeout(this.timeOut),
-                        catchError(ex => throwError((): any => ex))
-                    )
-            );
-            return response.payload;
-
-        } catch (ex) {
-            throw ex;
-        }
+        const response = await firstValueFrom(
+            this.httpclientService
+                .getMapping$<ApiResponse<T>>(url)
+                .pipe(
+                    timeout(this.timeOut),
+                    catchError(ex => throwError((): any => ex))
+                )
+        );
+        return response.payload;
     }
 
     public async getMappingList<T>(url: string): Promise<T> {
-        try {
-            return await firstValueFrom(
-                this.httpclientService
-                    .getMapping$<T>(url)
-                    .pipe(
-                        timeout(this.timeOut),
-                        catchError(ex => throwError((): any => ex))
-                    )
-            );
-        } catch (ex) {
-            throw ex;
-        }
+        return firstValueFrom(
+            this.httpclientService
+                .getMapping$<T>(url)
+                .pipe(
+                    timeout(this.timeOut),
+                    catchError(ex => throwError((): any => ex))
+                )
+        );
     }
 
     public async postMapping<T>(url: string, payload: unknown, options?: { context?: HttpContext }): Promise<T> {
