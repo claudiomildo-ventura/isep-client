@@ -1,5 +1,5 @@
 import {CommonModule} from "@angular/common";
-import {AfterViewInit, Component, inject, OnChanges, OnInit, Signal, signal, WritableSignal} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {ProgressBarComponent} from "src/app/components/progress-bar/progress-bar.component";
@@ -24,7 +24,7 @@ import {ENVIRONMENT} from 'src/environments/environment';
     templateUrl: './page-home.component.html',
     styleUrls: ['./page-home.component.css', "../../../../styles/sass/_variables.scss"],
 })
-export class PageHomeComponent implements OnInit, AfterViewInit, OnChanges {
+export class PageHomeComponent implements OnInit, AfterViewInit {
     private readonly _detail: WritableSignal<ApiResponse<string>> = signal({payload: StringFunc.STRING_EMPTY});
     public detail: Signal<ApiResponse<string>> = this._detail.asReadonly();
 
@@ -57,16 +57,8 @@ export class PageHomeComponent implements OnInit, AfterViewInit, OnChanges {
         this.progressBarInitialize();
     }
 
-    ngOnChanges(): void {
-        if (this.isPageLoading) {
-            document.body.classList.add('loading-active');
-        } else {
-            document.body.classList.remove('loading-active');
-        }
-    }
-
     get detailControl(): AbstractControl<any, any> | null {
-        return this.frm.get('group1.detail');
+        return this.frm.get('detail');
     }
 
     get errorMessage(): string | null {

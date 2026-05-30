@@ -11,13 +11,10 @@
 import {AppComponent} from './app/app.component';
 import {bootstrapApplication} from '@angular/platform-browser';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {PreloadAllModules, provideRouter, Route, withInMemoryScrolling, withPreloading} from "@angular/router";
+import {PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading} from "@angular/router";
 import {ROUTES} from "./app/app.route";
-import {ERROR_ROUTES} from "./app/core/error/error.route";
 import {TECHNICAL_LOGGER} from "./config/technical-logger";
 import {Interceptor} from "./app/core/interceptor/interceptor";
-
-export const ALL_ROUTES: Route[] = [...ROUTES, ...ERROR_ROUTES];
 
 bootstrapApplication(AppComponent, {
     providers: [
@@ -26,7 +23,7 @@ bootstrapApplication(AppComponent, {
             multi: true
         },
         provideHttpClient(withInterceptorsFromDi()),
-        provideRouter(ALL_ROUTES,
+        provideRouter(ROUTES,
             withPreloading(PreloadAllModules),
             withInMemoryScrolling({
                 scrollPositionRestoration: 'enabled',

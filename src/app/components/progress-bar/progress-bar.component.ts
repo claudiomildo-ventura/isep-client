@@ -27,9 +27,7 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
     }
 
     private progressBarInitialize(): void {
-        this.interval = setInterval((): void => {
-            this.progressBarLoadConfig();
-        }, PROGRESS_BAR.delay);
+        this.progressBarLoadConfig();
     }
 
     private progressBarLoadConfig(): void {

@@ -29,11 +29,11 @@ export class PageTitleComponent implements OnInit {
 
     ngOnInit(): void {
         void this.setTitle();
-        this.sessionStorageInitialize();
     }
 
     private async setTitle(): Promise<void> {
         this._title.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.title}`)});
+        this.sessionStorageInitialize();
     }
 
     /**
