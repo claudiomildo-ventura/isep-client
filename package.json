@@ -1,74 +1,74 @@
 {
-  "name": "isep_client",
-  "version": "0.0.1",
-  "description": "This API service is a modernization effort of a legacy application originally developed in Object Pascal (Delphi XE10).",
-  "author": "Claudiomildo Ventura",
-  "homepage": "",
-  "license": "Apache License, Version 2.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve --proxy-config proxy.config.json",
-    "start:mock": "node mocks/mock-server.js & ng serve --proxy-config proxy.config.json",
-    "build": "ng build --configuration production",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
-  },
-  "private": true,
-  "dependencies": {
-    "@angular/animations": "^20.3.20",
-    "@angular/cdk": "^20.2.14",
-    "@angular/common": "^20.3.20",
-    "@angular/compiler": "^20.3.20",
-    "@angular/core": "^20.3.20",
-    "@angular/forms": "^20.3.20",
-    "@angular/material": "^20.2.14",
-    "typescript": "~5.9.0",
-    "@angular/platform-browser-dynamic": "^20.3.20",
-    "@angular/router": "^20.3.20",
-    "@ngx-translate/core": "^17.0.0",
-    "@ngx-translate/http-loader": "^17.0.0",
-    "pino": "^10.1.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0",
-    "zone.js": "^0.15.1"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.25",
-    "@angular/cli": "~20.3.25",
-    "@angular/compiler-cli": "^20.3.20",
-    "@types/jasmine": "~4.0.0",
-    "@types/node": "^24.10.0",
-    "baseline-browser-mapping": "^2.9.0",
-    "jasmine-core": "~4.1.0",
-    "karma": "~6.3.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.0.0",
-    "karma-jasmine-html-reporter": "~1.7.0",
-    "prettier": "^3.6.2",
-    "prettier-plugin-curly": "^0.3.2",
-    "typescript": "~5.9.0"
-  },
-  "browserslist": [
-    "safari >= 12",
-    "edge >= 79",
-    "firefox >= 72",
-    "chrome >= 79",
-    "chromeAndroid 119",
-    "ios_saf >= 12",
-    "not op_mini all",
-    "not dead"
-  ],
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 4,
-    "semi": true,
-    "singleQuote": true,
-    "bracketSpacing": true,
-    "arrowParens": "always",
-    "printWidth": 120,
-    "plugins": [
-      "prettier-plugin-curly"
-    ]
-  }
+    "name": "isep_client",
+    "version": "0.0.1",
+    "description": "This API service is a modernization effort of a legacy application originally developed in Object Pascal (Delphi XE10).",
+    "author": "Claudiomildo Ventura",
+    "homepage": "",
+    "license": "Apache License, Version 2.0",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve --proxy-config proxy.config.json",
+        "start:mock": "node mocks/mock-server.js & ng serve --proxy-config proxy.config.json",
+        "build": "ng build --configuration production",
+        "watch": "ng build --watch --configuration development",
+        "test": "ng test"
+    },
+    "private": true,
+    "dependencies": {
+        "@angular/animations": "^21.2.22",
+        "@angular/cdk": "^21.2.14",
+        "@angular/common": "^21.2.22",
+        "@angular/compiler": "^21.2.22",
+        "@angular/core": "^21.2.22",
+        "@angular/forms": "^21.2.22",
+        "@angular/material": "^21.2.14",
+        "@angular/platform-browser": "^21.2.22",
+        "@angular/platform-browser-dynamic": "^21.2.22",
+        "@angular/router": "^21.2.22",
+        "@ngx-translate/core": "^17.0.0",
+        "@ngx-translate/http-loader": "^17.0.0",
+        "rxjs": "~7.8.0",
+        "tslib": "^2.3.0",
+        "typescript": "~5.9.0",
+        "zone.js": "^0.15.1"
+    },
+    "devDependencies": {
+        "@angular/build": "^21.2.22",
+        "@angular/cli": "~21.2.22",
+        "@angular/compiler-cli": "^21.2.22",
+        "@types/jasmine": "~4.0.0",
+        "@types/node": "^24.10.0",
+        "baseline-browser-mapping": "^2.9.0",
+        "jasmine-core": "~4.1.0",
+        "karma": "^6.4.4",
+        "karma-chrome-launcher": "~3.1.0",
+        "karma-coverage": "~2.2.0",
+        "karma-jasmine": "~5.0.0",
+        "karma-jasmine-html-reporter": "~1.7.0",
+        "prettier": "^3.6.2",
+        "prettier-plugin-curly": "^0.3.2",
+        "typescript": "~5.9.0"
+    },
+    "browserslist": [
+        "last 2 Chrome versions",
+        "last 2 Firefox versions",
+        "last 2 Edge major versions",
+        "last 2 Safari major versions",
+        "last 2 iOS major versions",
+        "Firefox ESR",
+        "not op_mini all",
+        "not dead"
+    ],
+    "prettier": {
+        "trailingComma": "all",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": true,
+        "bracketSpacing": true,
+        "arrowParens": "always",
+        "printWidth": 120,
+        "plugins": [
+            "prettier-plugin-curly"
+        ]
+    }
 }

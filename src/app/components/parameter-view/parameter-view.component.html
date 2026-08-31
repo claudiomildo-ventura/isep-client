@@ -1,47 +1,47 @@
-<form [formGroup]="this.frm" (ngSubmit)="submit()">
+<form [formGroup]="frm" (ngSubmit)="submit()">
     <mat-card>
         <mat-card-content class="mat-elevation-z0">
             <div class="d-flex space-x-10 fields-row">
 
                 <mat-form-field appearance="outline">
-                    <mat-label [style.user-select]="'none'" #lblArchitecture>{{ this.architecture().payload }}</mat-label>
+                    <mat-label [style.user-select]="'none'" #lblArchitecture>{{ architecture().payload }}</mat-label>
                     <mat-select formControlName="architectures">
-                        <mat-option *ngFor="let item of this.architectures()" [value]="item.id">{{ item.data }}</mat-option>
+                        <mat-option *ngFor="let item of architectures()" [value]="item.id">{{ item.data }}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label [style.user-select]="'none'" #lblDatabasePlatform>{{ this.databasePlatform().payload }}</mat-label>
+                    <mat-label [style.user-select]="'none'" #lblDatabasePlatform>{{ databasePlatform().payload }}</mat-label>
                     <mat-select formControlName="databasePlatforms">
-                        <mat-option *ngFor="let item of this.databasePlatforms()" [value]="item.id">{{ item.data }}</mat-option>
+                        <mat-option *ngFor="let item of databasePlatforms()" [value]="item.id">{{ item.data }}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label [style.user-select]="'none'" #lblDatabaseEngineer>{{ this.databaseEngineer().payload }}</mat-label>
+                    <mat-label [style.user-select]="'none'" #lblDatabaseEngineer>{{ databaseEngineer().payload }}</mat-label>
                     <mat-select formControlName="databaseEngineers">
-                        <mat-option *ngFor="let item of this.databaseEngineers()" [value]="item.id">{{ item.data }}</mat-option>
+                        <mat-option *ngFor="let item of databaseEngineers()" [value]="item.id">{{ item.data }}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label [style.user-select]="'none'" #lblEngineeringPlatform>{{ this.engineeringPlatform().payload }}</mat-label>
+                    <mat-label [style.user-select]="'none'" #lblEngineeringPlatform>{{ engineeringPlatform().payload }}</mat-label>
                     <mat-select formControlName="engineeringPlatforms">
-                        <mat-option *ngFor="let item of this.engineeringPlatforms()" [value]="item.id">{{ item.data }}</mat-option>
+                        <mat-option *ngFor="let item of engineeringPlatforms()" [value]="item.id">{{ item.data }}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label [style.user-select]="'none'" #lblTemplate>{{ this.template().payload }}</mat-label>
+                    <mat-label [style.user-select]="'none'" #lblTemplate>{{ template().payload }}</mat-label>
                     <mat-select formControlName="templates">
-                        <mat-option *ngFor="let item of this.templates()" [value]="item.id">{{ item.data }}</mat-option>
+                        <mat-option *ngFor="let item of templates()" [value]="item.id">{{ item.data }}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <mat-label [style.user-select]="'none'" #lblProjectTemplate>{{ this.projectTemplate().payload }}</mat-label>
+                    <mat-label [style.user-select]="'none'" #lblProjectTemplate>{{ projectTemplate().payload }}</mat-label>
                     <mat-select formControlName="projectTemplates">
-                        <mat-option *ngFor="let item of this.projectTemplates()" [value]="item.id">{{ item.data }}</mat-option>
+                        <mat-option *ngFor="let item of projectTemplates()" [value]="item.id">{{ item.data }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -49,7 +49,7 @@
     </mat-card>
 
     <div class="d-flex flex-row justify-content-end mt-3">
-        <button type="submit" mat-stroked-button color="accent" [disabled]="this.frm.invalid">
+        <button type="submit" mat-stroked-button color="accent" [disabled]="frm.invalid">
             <mat-icon>check</mat-icon>
             <span>Submit</span>
         </button>

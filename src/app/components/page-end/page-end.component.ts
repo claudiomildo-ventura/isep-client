@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {PageEnterpriseComponent} from "src/app/components/page-enterprise/page-enterprise.component";
 import {ArchetypeService} from "src/app/core/services/archetype.service";
 import {MaterialModule} from "src/app/material.module";
@@ -21,8 +21,6 @@ export class PageEndComponent implements OnInit {
     public footer: Signal<ApiResponse<string>> = this._footer.asReadonly();
 
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
-
-    @ViewChild('lblFooter') lblFooter!: ElementRef<HTMLParagraphElement>;
 
     ngOnInit(): void {
         void this.setFooter();

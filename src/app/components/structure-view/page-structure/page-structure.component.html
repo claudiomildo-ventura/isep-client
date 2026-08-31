@@ -1,4 +1,4 @@
-<form [formGroup]="this.frm" (ngSubmit)="submit()">
+<form [formGroup]="frm" (ngSubmit)="submit()">
     <mat-card>
         <mat-card-content class="mat-elevation-z0">
             <div class="table-responsive">
@@ -58,7 +58,7 @@
 
     <div class="d-flex flex-column flex-sm-row justify-content-end mt-3 gap-2">
         <button type="submit" mat-stroked-button color="accent" class="submit-btn"
-                [disabled]="isPageLoading || this.frm.invalid || selectionModel.selected.length === 0">
+                [disabled]="isPageLoading || frm.invalid || selectionModel.selected.length === 0">
             <mat-icon *ngIf="!isPageLoading">check</mat-icon>
             <span *ngIf="!isPageLoading">Submit</span>
         </button>

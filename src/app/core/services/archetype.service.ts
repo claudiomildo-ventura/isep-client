@@ -1,7 +1,7 @@
-import {HttpContext} from "@angular/common/http";
+import {HttpContext, HttpErrorResponse} from "@angular/common/http";
 import {inject, Injectable} from '@angular/core';
-import {firstValueFrom, throwError} from "rxjs";
-import {catchError, timeout} from "rxjs/operators";
+import {firstValueFrom} from "rxjs";
+import {timeout} from "rxjs/operators";
 import {ApiResponse} from "../../shared/interface/ApiResponse";
 import {DialogService} from "./dialog.service";
 import {HttpclientService} from "./httpclient.service";
@@ -16,10 +16,7 @@ export class ArchetypeService {
         const response = await firstValueFrom(
             this.httpclientService
                 .getMapping$<ApiResponse<T>>(url)
-                .pipe(
-                    timeout(this.timeOut),
-                    catchError(ex => throwError((): any => ex))
-                )
+                .pipe(timeout(this.timeOut))
         );
         return response.payload;
     }
@@ -28,10 +25,7 @@ export class ArchetypeService {
         return firstValueFrom(
             this.httpclientService
                 .getMapping$<T>(url)
-                .pipe(
-                    timeout(this.timeOut),
-                    catchError(ex => throwError((): any => ex))
-                )
+                .pipe(timeout(this.timeOut))
         );
     }
 
@@ -39,14 +33,11 @@ export class ArchetypeService {
         try {
             return await firstValueFrom(
                 this.httpclientService.postMapping$<T>(url, payload, options)
-                    .pipe(
-                        timeout(this.timeOut),
-                        catchError(ex => throwError((): any => ex))
-                    )
+                    .pipe(timeout(this.timeOut))
             );
-        } catch (ex: any) {
-            if (ex?.status === 500) {
-                await this.dialogService.confirm(ex?.status, ex?.error?.message);
+        } catch (ex: unknown) {
+            if (ex instanceof HttpErrorResponse && ex.status === 500) {
+                await this.dialogService.confirm(ex.status, ex.error?.message);
             }
 
             throw ex;

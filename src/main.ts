@@ -10,26 +10,9 @@
 
 import {AppComponent} from './app/app.component';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading} from "@angular/router";
-import {ROUTES} from "./app/app.route";
+import {APP_CONFIG} from './app/app.config';
 import {TECHNICAL_LOGGER} from "./config/technical-logger";
-import {Interceptor} from "./app/core/interceptor/interceptor";
 
-bootstrapApplication(AppComponent, {
-    providers: [
-        {
-            provide: HTTP_INTERCEPTORS, useClass: Interceptor,
-            multi: true
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideRouter(ROUTES,
-            withPreloading(PreloadAllModules),
-            withInMemoryScrolling({
-                scrollPositionRestoration: 'enabled',
-                anchorScrolling: 'enabled'
-            })
-        ),
-    ]
-}).then(r => TECHNICAL_LOGGER.info('running application'))
+bootstrapApplication(AppComponent, APP_CONFIG)
+    .then(r => TECHNICAL_LOGGER.info('running application'))
     .catch(ex => TECHNICAL_LOGGER.error('Error during application bootstrap:', ex));

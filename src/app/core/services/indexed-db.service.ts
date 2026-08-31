@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DATABASE_SERVICE} from "../../../config/database-service";
+import {Table} from "../../shared/interface/Table";
 
 @Injectable({providedIn: 'root'})
 export class IndexedDbService {
@@ -32,14 +33,12 @@ export class IndexedDbService {
         this.dbPromise = this.openDatabase();
     }
 
-    public async saveData(columns: any[]): Promise<void> {
+    public async saveData(columns: Table[]): Promise<void> {
         const database: IDBDatabase = await this.dbPromise;
         const transac: IDBTransaction = database.transaction(DATABASE_SERVICE.storeName, 'readwrite');
         const store: IDBObjectStore = transac.objectStore(DATABASE_SERVICE.storeName);
 
-        // Assign unique keys
-        columns.forEach(col => col.uid = `idx_${col.id}`);
-        columns.forEach(col => store.put(col));
+        columns.forEach((column: Table): IDBRequest<IDBValidKey> => store.put({...column, uid: `idx_${column.id}`}));
 
         return new Promise((resolve, reject): void => {
             transac.oncomplete = (): void => resolve();
@@ -47,11 +46,11 @@ export class IndexedDbService {
         });
     }
 
-    public async getColumns(): Promise<any[]> {
+    public async getColumns(): Promise<Table[]> {
         const database: IDBDatabase = await this.dbPromise;
         const transac: IDBTransaction = database.transaction(DATABASE_SERVICE.storeName, 'readonly');
         const store: IDBObjectStore = transac.objectStore(DATABASE_SERVICE.storeName);
-        const request: IDBRequest<any> = store.getAll();
+        const request: IDBRequest<Table[]> = store.getAll();
 
         return new Promise((resolve, reject): void => {
             request.onsuccess = (): void => resolve(request.result);

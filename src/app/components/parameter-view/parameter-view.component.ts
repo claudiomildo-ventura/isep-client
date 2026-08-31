@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
-import {Component, ElementRef, inject, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
+import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ProgressBarComponent} from "src/app/components/progress-bar/progress-bar.component";
 import {ApiResponse} from "src/app/shared/interface/ApiResponse";
@@ -16,6 +16,15 @@ import {ParameterListResponse} from "../../shared/interface/parameter-list-respo
 import {Table} from "../../shared/interface/Table";
 import {NUMBER_CONSTANT} from "../../shared/NumberConstant";
 import {StringFunc} from "../../shared/string-utils/StringFunc";
+
+type ParameterForm = FormGroup<{
+    architectures: FormControl<number>;
+    databasePlatforms: FormControl<number>;
+    databaseEngineers: FormControl<number>;
+    engineeringPlatforms: FormControl<number>;
+    templates: FormControl<number>;
+    projectTemplates: FormControl<number>;
+}>;
 
 @Component({
     selector: 'parameter-view',
@@ -67,25 +76,18 @@ export class ParameterViewComponent implements OnInit {
     public projectTemplates: Signal<ParameterListResponse[]> = this._projectTemplates.asReadonly();
 
     private readonly router: Router = inject(Router);
-    private readonly fb: FormBuilder = inject(FormBuilder);
+    private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
     private readonly dialogService: DialogService = inject(DialogService);
     private readonly indexedDbService: IndexedDbService = inject(IndexedDbService);
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
 
-    @ViewChild('lblArchitecture') lblArchitecture!: ElementRef<HTMLElement>;
-    @ViewChild('lblDatabasePlatform') lblDatabasePlatform!: ElementRef<HTMLElement>;
-    @ViewChild('lblDatabaseEngineer') lblDatabaseEngineer!: ElementRef<HTMLElement>;
-    @ViewChild('lblEngineeringPlatform') lblEngineeringPlatform!: ElementRef<HTMLElement>;
-    @ViewChild('lblTemplate') lblTemplate!: ElementRef<HTMLElement>;
-    @ViewChild('lblProjectTemplate') lblProjectTemplate!: ElementRef<HTMLElement>;
-
-    public frm: FormGroup = this.fb.group({
-        architectures: [0],
-        databasePlatforms: [0],
-        databaseEngineers: [0],
-        engineeringPlatforms: [0],
-        templates: [0],
-        projectTemplates: [0]
+    public frm: ParameterForm = this.fb.group({
+        architectures: 0,
+        databasePlatforms: 0,
+        databaseEngineers: 0,
+        engineeringPlatforms: 0,
+        templates: 0,
+        projectTemplates: 0
     });
 
     ngOnInit(): void {
@@ -100,11 +102,9 @@ export class ParameterViewComponent implements OnInit {
             return;
         }
 
-        setTimeout(async (): Promise<void> => {
-            await this.dataPost();
-            await this.navigateToPageHome();
-            void this.dialogService.info('Solution generated successfully.');
-        }, 1000);
+        await this.dataPost();
+        await this.navigateToPageHome();
+        void this.dialogService.info('Solution generated successfully.');
     }
 
     private async navigateToPageHome(): Promise<void> {
@@ -112,7 +112,7 @@ export class ParameterViewComponent implements OnInit {
     }
 
     private async dataPost(): Promise<void> {
-        const tablesData: any[] = await this.indexedDbService.getColumns();
+        const tablesData: Table[] = await this.indexedDbService.getColumns();
 
         const tables: Table[] = [];
 
@@ -150,14 +150,15 @@ export class ParameterViewComponent implements OnInit {
             tables.push(table);
         }
 
+        const formValue = this.frm.getRawValue();
         const archetypeGenerate: ArchetypeGenerate = {
             autoCreated: true,
-            architecture: this.frm.value.architectures,
-            databasePlatform: this.frm.value.databasePlatforms,
-            databaseEngineer: this.frm.value.databaseEngineers,
-            engineeringPlatform: this.frm.value.engineeringPlatforms,
-            template: this.frm.value.templates,
-            projectTemplate: this.frm.value.projectTemplates,
+            architecture: formValue.architectures,
+            databasePlatform: formValue.databasePlatforms,
+            databaseEngineer: formValue.databaseEngineers,
+            engineeringPlatform: formValue.engineeringPlatforms,
+            template: formValue.templates,
+            projectTemplate: formValue.projectTemplates,
             tables: tables
         };
 
@@ -201,36 +202,36 @@ export class ParameterViewComponent implements OnInit {
     private async architecturesInitialize(): Promise<void> {
         this._architecture.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.architecture}`)});
         this._architectures.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.architectures}`));
-        this.frm.patchValue({architecture: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({architectures: NUMBER_CONSTANT.INITIALIZE_WITH_0});
     }
 
     private async databasePlatformInitialize(): Promise<void> {
         this._databasePlatform.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_platform}`)});
         this._databasePlatforms.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_platforms}`));
-        this.frm.patchValue({databasePlatform: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({databasePlatforms: NUMBER_CONSTANT.INITIALIZE_WITH_0});
     }
 
     private async databaseEngineerInitialize(): Promise<void> {
         this._databaseEngineer.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_engineer}`)});
         this._databaseEngineers.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_engineers}`));
-        this.frm.patchValue({databaseEngineer: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({databaseEngineers: NUMBER_CONSTANT.INITIALIZE_WITH_0});
     }
 
     private async engineeringPlatformInitialize(): Promise<void> {
         this._engineeringPlatform.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.engineering_platform}`)});
         this._engineeringPlatforms.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.engineering_platforms}`));
-        this.frm.patchValue({engineeringPlatform: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({engineeringPlatforms: NUMBER_CONSTANT.INITIALIZE_WITH_0});
     }
 
     private async templatesInitialize(): Promise<void> {
         this._template.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.template}`)});
         this._templates.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.templates}`));
-        this.frm.patchValue({template: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({templates: NUMBER_CONSTANT.INITIALIZE_WITH_0});
     }
 
     private async projectTemplatesInitialize(): Promise<void> {
         this._projectTemplate.set({payload: await this.archetypeService.getMapping(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.project_template}`)});
         this._projectTemplates.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.project_templates}`));
-        this.frm.patchValue({projectTemplate: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({projectTemplates: NUMBER_CONSTANT.INITIALIZE_WITH_0});
     }
 }

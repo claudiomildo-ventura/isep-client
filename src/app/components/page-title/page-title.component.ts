@@ -1,5 +1,5 @@
 import {UpperCasePipe} from "@angular/common";
-import {Component, ElementRef, inject, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {ArchetypeService} from "src/app/core/services/archetype.service";
 import {SessionService} from "src/app/core/services/session-storage.service";
 import {MaterialModule} from "src/app/material.module";
@@ -24,8 +24,6 @@ export class PageTitleComponent implements OnInit {
 
     private readonly sessionService: SessionService = inject(SessionService);
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
-
-    @ViewChild('lblTitle') lblTitle!: ElementRef<HTMLSpanElement>;
 
     ngOnInit(): void {
         void this.setTitle();
