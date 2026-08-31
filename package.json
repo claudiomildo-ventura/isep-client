@@ -1,7 +1,7 @@
 {
     "name": "isep_client",
     "version": "0.0.1",
-    "description": "This API service is a modernization effort of a legacy application originally developed in Object Pascal (Delphi XE10).",
+    "description": "Angular frontend for the Integrated Software Engineering Platform.",
     "author": "Claudiomildo Ventura",
     "homepage": "",
     "license": "Apache License, Version 2.0",
