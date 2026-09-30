@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
 import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
-import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ProgressBarComponent} from "src/app/components/progress-bar/progress-bar.component";
 import {ApiResponse} from "src/app/shared/interface/ApiResponse";
@@ -14,16 +14,15 @@ import {MaterialModule} from "../../material.module";
 import {Field} from "../../shared/interface/Field";
 import {ParameterListResponse} from "../../shared/interface/parameter-list-response";
 import {Table} from "../../shared/interface/Table";
-import {NUMBER_CONSTANT} from "../../shared/NumberConstant";
 import {StringFunc} from "../../shared/string-utils/StringFunc";
 
 type ParameterForm = FormGroup<{
-    architectures: FormControl<number>;
-    databasePlatforms: FormControl<number>;
-    databaseEngineers: FormControl<number>;
-    engineeringPlatforms: FormControl<number>;
-    templates: FormControl<number>;
-    projectTemplates: FormControl<number>;
+    architectures: FormControl<string>;
+    databasePlatforms: FormControl<string>;
+    databaseEngineers: FormControl<string>;
+    engineeringPlatforms: FormControl<string>;
+    templates: FormControl<string>;
+    projectTemplates: FormControl<string>;
 }>;
 
 @Component({
@@ -82,12 +81,12 @@ export class ParameterViewComponent implements OnInit {
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
 
     public frm: ParameterForm = this.fb.group({
-        architectures: 0,
-        databasePlatforms: 0,
-        databaseEngineers: 0,
-        engineeringPlatforms: 0,
-        templates: 0,
-        projectTemplates: 0
+        architectures: ['', Validators.required],
+        databasePlatforms: ['', Validators.required],
+        databaseEngineers: ['', Validators.required],
+        engineeringPlatforms: ['', Validators.required],
+        templates: ['', Validators.required],
+        projectTemplates: ['', Validators.required]
     });
 
     ngOnInit(): void {
@@ -202,36 +201,36 @@ export class ParameterViewComponent implements OnInit {
     private async architecturesInitialize(): Promise<void> {
         this._architecture.set({payload: 'Architecture'});
         this._architectures.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.architectures}`));
-        this.frm.patchValue({architectures: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({architectures: ''});
     }
 
     private async databasePlatformInitialize(): Promise<void> {
         this._databasePlatform.set({payload: 'Database platform'});
         this._databasePlatforms.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_platforms}`));
-        this.frm.patchValue({databasePlatforms: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({databasePlatforms: ''});
     }
 
     private async databaseEngineerInitialize(): Promise<void> {
         this._databaseEngineer.set({payload: 'Database engineer'});
         this._databaseEngineers.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_engineers}`));
-        this.frm.patchValue({databaseEngineers: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({databaseEngineers: ''});
     }
 
     private async engineeringPlatformInitialize(): Promise<void> {
         this._engineeringPlatform.set({payload: 'Engineering platform'});
         this._engineeringPlatforms.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.engineering_platforms}`));
-        this.frm.patchValue({engineeringPlatforms: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({engineeringPlatforms: ''});
     }
 
     private async templatesInitialize(): Promise<void> {
         this._template.set({payload: 'Template'});
         this._templates.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.templates}`));
-        this.frm.patchValue({templates: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({templates: ''});
     }
 
     private async projectTemplatesInitialize(): Promise<void> {
         this._projectTemplate.set({payload: 'Project template'});
         this._projectTemplates.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.project_templates}`));
-        this.frm.patchValue({projectTemplates: NUMBER_CONSTANT.INITIALIZE_WITH_0});
+        this.frm.patchValue({projectTemplates: ''});
     }
 }

@@ -1,4 +1,4 @@
 export interface ParameterListResponse {
-    id: number;
+    id: string;
     data: string;
 }

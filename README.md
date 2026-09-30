@@ -1,6 +1,4 @@
-# ISEP | Integrated Software Engineering Platform - frontend
-
----
+# ISEP | Integrated Software Engineering Platform - Client
 
 ## Project Overview
 
@@ -10,29 +8,29 @@ The project is part of a modernization effort for a legacy application originall
 
 ## Technologies Used
 
-The project uses a modern frontend and DevOps stack:
-
 [![Skills](https://skillicons.dev/icons?i=ts,angular,npm,docker,nginx,git,github,githubactions,md&theme=light)](https://skillicons.dev)
 
-- Angular 21
-- TypeScript 5.9
-- Angular Material
-- RxJS
-- ngx-translate
-- Karma and Jasmine
-- Docker and NGINX
-- GitHub Actions
+| Technology | Version / Usage |
+| --- | --- |
+| Angular | 21 |
+| TypeScript | 5.9 |
+| Angular Material | UI components |
+| RxJS | Reactive programming |
+| ngx-translate | Internationalization |
+| Karma and Jasmine | Unit testing |
+| Docker and NGINX | Containerized build and hosting |
+| GitHub Actions | CI/CD |
 
 ## Project Structure
 
 ```text
 src/
-  app/
-    components/        Application pages and reusable UI components
-    core/              Services, interceptors, guards, and error routes
-    shared/            Interfaces, validators, pipes, constants, and utilities
-  assets/              Static assets and runtime configuration files
-  environments/        Environment-specific Angular configuration
++-- app/
+|   +-- components/    Application pages and reusable UI components
+|   +-- core/          Services, interceptors, guards, and error routes
+|   +-- shared/        Interfaces, validators, pipes, constants, and utilities
++-- assets/            Static assets and runtime configuration files
++-- environments/      Environment-specific Angular configuration
 ```
 
 ## Backend Integration
@@ -41,15 +39,15 @@ During local development, the Angular dev server uses `proxy.config.json` to for
 
 The main environment configuration is defined in `src/environments/environment.ts`.
 
-## Available Scripts
+## Build and Run
 
-Install dependencies:
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-Start the development server:
+### Run Locally
 
 ```bash
 npm start
@@ -57,17 +55,32 @@ npm start
 
 The application runs on `http://localhost:3000`.
 
-Run tests:
+### Production Build
+
+```bash
+npm run build
+```
+
+## Testing
 
 ```bash
 npm test
 ```
 
-Build for production:
+For a single headless run:
 
 ```bash
-npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
 ```
+
+On Windows without Chrome, use the installed Chromium-based Edge executable:
+
+```powershell
+$env:CHROME_BIN = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+npm test -- --watch=false --browsers=ChromeHeadless
+```
+
+Component tests mock backend requests and IndexedDB. Running backend services is not required.
 
 ## Docker
 

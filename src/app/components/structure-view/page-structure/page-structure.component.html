@@ -1,6 +1,6 @@
 <form [formGroup]="frm" (ngSubmit)="submit()">
-    <mat-card>
-        <mat-card-content class="mat-elevation-z0">
+    <section aria-labelledby="structure-heading">
+        <h2 id="structure-heading" class="page-heading">Database structure</h2>
             <div class="table-responsive">
                 <table mat-table [dataSource]="dtsTables" matSort class="mat-elevation-z0">
                     <ng-container matColumnDef="fields">
@@ -15,7 +15,7 @@
                             </mat-checkbox>
 
                             <div class="fields-container">
-                                <mat-card *ngFor="let field of table.fields" class="field-card mat-elevation-z2" appearance="outlined">
+                                <mat-card *ngFor="let field of table.fields" class="field-card" appearance="outlined">
 
                                     <mat-card-header [style.user-select]="'none'">
                                         <mat-card-title class="fw-bold"> {{ field.columnName | uppercase }}</mat-card-title>
@@ -53,11 +53,10 @@
                     <tr mat-row *matRowDef="let row; columns: dtsTablesCols"></tr>
                 </table>
             </div>
-        </mat-card-content>
-    </mat-card>
+    </section>
 
-    <div class="d-flex flex-column flex-sm-row justify-content-end mt-3 gap-2">
-        <button type="submit" mat-stroked-button color="accent" class="submit-btn"
+    <div class="page-actions">
+        <button type="submit" mat-flat-button color="primary" class="submit-btn"
                 [disabled]="!canSubmit()">
             <mat-icon *ngIf="canSubmit()">check</mat-icon>
             <span>Submit</span>
