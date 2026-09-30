@@ -79,14 +79,15 @@ export class ParameterViewComponent implements OnInit {
     private readonly dialogService: DialogService = inject(DialogService);
     private readonly indexedDbService: IndexedDbService = inject(IndexedDbService);
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
+    private readonly selectionValidators = [Validators.required, Validators.pattern(/^(?!0$).+$/)];
 
     public frm: ParameterForm = this.fb.group({
-        architectures: ['', Validators.required],
-        databasePlatforms: ['', Validators.required],
-        databaseEngineers: ['', Validators.required],
-        engineeringPlatforms: ['', Validators.required],
-        templates: ['', Validators.required],
-        projectTemplates: ['', Validators.required]
+        architectures: ['0', this.selectionValidators],
+        databasePlatforms: ['0', this.selectionValidators],
+        databaseEngineers: ['0', this.selectionValidators],
+        engineeringPlatforms: ['0', this.selectionValidators],
+        templates: ['0', this.selectionValidators],
+        projectTemplates: ['0', this.selectionValidators]
     });
 
     ngOnInit(): void {
@@ -97,11 +98,16 @@ export class ParameterViewComponent implements OnInit {
 
     public async submit(): Promise<void> {
         if (this.frm.invalid) {
-            void this.dialogService.alert('Invalid form!');
+            this.frm.markAllAsTouched();
             return;
         }
 
-        await this.dataPost();
+        try {
+            await this.dataPost();
+        } catch {
+            void this.dialogService.alert('Unable to generate the solution. Check the selected profile and try again.');
+            return;
+        }
         await this.navigateToPageHome();
         void this.dialogService.info('Solution generated successfully.');
     }
@@ -161,14 +167,10 @@ export class ParameterViewComponent implements OnInit {
             tables: tables
         };
 
-        try {
-            await this.archetypeService.postMapping<void>(
-                `${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.generate_solution}`,
-                archetypeGenerate
-            );
-        } catch (ex) {
-            void this.dialogService.alert('Error generating solution:' + ex);
-        }
+        await this.archetypeService.postMapping<void>(
+            `${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.generate_solution}`,
+            archetypeGenerate
+        );
     }
 
     private allTitleComponentsInitialize(): void {
@@ -201,36 +203,36 @@ export class ParameterViewComponent implements OnInit {
     private async architecturesInitialize(): Promise<void> {
         this._architecture.set({payload: 'Architecture'});
         this._architectures.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.architectures}`));
-        this.frm.patchValue({architectures: ''});
+        this.frm.patchValue({architectures: '0'});
     }
 
     private async databasePlatformInitialize(): Promise<void> {
         this._databasePlatform.set({payload: 'Database platform'});
         this._databasePlatforms.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_platforms}`));
-        this.frm.patchValue({databasePlatforms: ''});
+        this.frm.patchValue({databasePlatforms: '0'});
     }
 
     private async databaseEngineerInitialize(): Promise<void> {
         this._databaseEngineer.set({payload: 'Database engineer'});
         this._databaseEngineers.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.database_engineers}`));
-        this.frm.patchValue({databaseEngineers: ''});
+        this.frm.patchValue({databaseEngineers: '0'});
     }
 
     private async engineeringPlatformInitialize(): Promise<void> {
         this._engineeringPlatform.set({payload: 'Engineering platform'});
         this._engineeringPlatforms.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.engineering_platforms}`));
-        this.frm.patchValue({engineeringPlatforms: ''});
+        this.frm.patchValue({engineeringPlatforms: '0'});
     }
 
     private async templatesInitialize(): Promise<void> {
         this._template.set({payload: 'Template'});
         this._templates.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.templates}`));
-        this.frm.patchValue({templates: ''});
+        this.frm.patchValue({templates: '0'});
     }
 
     private async projectTemplatesInitialize(): Promise<void> {
         this._projectTemplate.set({payload: 'Project template'});
         this._projectTemplates.set(await this.archetypeService.getMappingList<ParameterListResponse[]>(`${ENVIRONMENT.basePath}${ENVIRONMENT.endpoints.project_templates}`));
-        this.frm.patchValue({projectTemplates: ''});
+        this.frm.patchValue({projectTemplates: '0'});
     }
 }

@@ -43,8 +43,10 @@ The main environment configuration is defined in `src/environments/environment.t
 
 ### Install Dependencies
 
+Use Node.js 24, matching the Docker build.
+
 ```bash
-npm install
+npm ci
 ```
 
 ### Run Locally
@@ -82,6 +84,8 @@ npm test -- --watch=false --browsers=ChromeHeadless
 
 Component tests mock backend requests and IndexedDB. Running backend services is not required.
 
+Parameter form tests cover the initial `0` selection, required-field messages without HTTP submission, resetting each parameter to an unselected state, textual enum IDs, the explicit API-only option, successful navigation and generation failures without false success messages. Valid selections continue to use enum names in API requests; `0` is only the unselected form state.
+
 ## Docker
 
 Build and run the frontend container with Docker Compose:
@@ -90,4 +94,4 @@ Build and run the frontend container with Docker Compose:
 docker compose up --build
 ```
 
-The Docker image builds the Angular application and serves the generated files with NGINX.
+The Docker image builds with Node.js 24 and `npm ci`, then serves `dist/angular-ecommerce/browser` with NGINX. Local dependencies, build output and caches are excluded from the Docker context. The home-page browser title is `CV IT - isep`, and the platform heading is centered.

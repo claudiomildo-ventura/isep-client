@@ -14,6 +14,14 @@ describe('ParameterViewComponent', () => {
   let dialogService: jasmine.SpyObj<DialogService>;
   let indexedDbService: jasmine.SpyObj<IndexedDbService>;
   let navigate: jasmine.Spy;
+  const validSelection = {
+    architectures: 'HEXAGONAL',
+    databasePlatforms: 'SQLITE',
+    databaseEngineers: 'HIBERNATE',
+    engineeringPlatforms: 'INTELLIJ_IDEA',
+    templates: 'NOT_IMPLEMENTED',
+    projectTemplates: 'API_WITH_MODEL'
+  };
 
   beforeEach(async () => {
     archetypeService = jasmine.createSpyObj('ArchetypeService', ['getMappingList', 'postMapping']);
@@ -46,15 +54,52 @@ describe('ParameterViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
     expect(archetypeService.getMappingList).toHaveBeenCalledTimes(6);
-    expect(Object.values(component.frm.getRawValue())).toEqual(['', '', '', '', '', '']);
+    expect(Object.values(component.frm.getRawValue())).toEqual(['0', '0', '0', '0', '0', '0']);
+    expect(component.frm.invalid).toBeTrue();
   });
 
   it('should reject an incomplete form without generating or navigating', async () => {
     await component.submit();
-    expect(dialogService.alert).toHaveBeenCalledWith('Invalid form!');
+    fixture.detectChanges();
+    expect(Object.values(component.frm.controls).every(control => control.touched)).toBeTrue();
+    expect(fixture.nativeElement.querySelectorAll('mat-error').length).toBe(6);
+    expect(dialogService.alert).not.toHaveBeenCalled();
     expect(archetypeService.postMapping).not.toHaveBeenCalled();
     expect(indexedDbService.getColumns).not.toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
+  });
+
+  for (const field of Object.keys(validSelection) as Array<keyof typeof validSelection>) {
+    it(`should require an explicit selection for ${field}`, async () => {
+      component.frm.setValue(validSelection);
+      component.frm.controls[field].setValue('0');
+
+      await component.submit();
+
+      expect(component.frm.invalid).toBeTrue();
+      expect(archetypeService.postMapping).not.toHaveBeenCalled();
+      expect(indexedDbService.getColumns).not.toHaveBeenCalled();
+      expect(navigate).not.toHaveBeenCalled();
+      component.frm.controls[field].setValue('');
+      expect(component.frm.invalid).toBeTrue();
+      component.frm.controls[field].setValue(validSelection[field]);
+      expect(component.frm.valid).toBeTrue();
+    });
+  }
+
+  it('should stay on the form and show only an error when generation fails', async () => {
+    component.frm.setValue(validSelection);
+    archetypeService.postMapping.and.rejectWith(new Error('Generation rejected'));
+
+    await component.submit();
+
+    expect(archetypeService.postMapping).toHaveBeenCalledTimes(1);
+    expect(dialogService.alert).toHaveBeenCalledOnceWith(
+      'Unable to generate the solution. Check the selected profile and try again.'
+    );
+    expect(dialogService.info).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
+    expect(component.frm.getRawValue()).toEqual(validSelection);
   });
 
   it('should submit textual enum IDs and navigate after generation', async () => {
@@ -67,14 +112,7 @@ describe('ParameterViewComponent', () => {
       }]
     };
     indexedDbService.getColumns.and.resolveTo([table]);
-    component.frm.setValue({
-      architectures: 'HEXAGONAL',
-      databasePlatforms: 'SQLITE',
-      databaseEngineers: 'HIBERNATE',
-      engineeringPlatforms: 'INTELLIJ_IDEA',
-      templates: 'NOT_IMPLEMENTED',
-      projectTemplates: 'API_WITH_MODEL'
-    });
+    component.frm.setValue(validSelection);
 
     await component.submit();
 

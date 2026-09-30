@@ -6,49 +6,73 @@
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblArchitecture>{{ architecture().payload }}</mat-label>
                     <mat-select formControlName="architectures">
-                        <mat-option *ngFor="let item of architectures()" [value]="item.data ? item.id : ''">{{ item.data }}</mat-option>
+                        <mat-option value="0">Select...</mat-option>
+                        <ng-container *ngFor="let item of architectures()">
+                            <mat-option *ngIf="item.data && item.id !== 'DEFAULT'" [value]="item.id">{{ item.data }}</mat-option>
+                        </ng-container>
                     </mat-select>
+                    <mat-error>Select an architecture.</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblDatabasePlatform>{{ databasePlatform().payload }}</mat-label>
                     <mat-select formControlName="databasePlatforms">
-                        <mat-option *ngFor="let item of databasePlatforms()" [value]="item.data ? item.id : ''">{{ item.data }}</mat-option>
+                        <mat-option value="0">Select...</mat-option>
+                        <ng-container *ngFor="let item of databasePlatforms()">
+                            <mat-option *ngIf="item.data && item.id !== 'DEFAULT'" [value]="item.id">{{ item.data }}</mat-option>
+                        </ng-container>
                     </mat-select>
+                    <mat-error>Select a database platform.</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblDatabaseEngineer>{{ databaseEngineer().payload }}</mat-label>
                     <mat-select formControlName="databaseEngineers">
-                        <mat-option *ngFor="let item of databaseEngineers()" [value]="item.data ? item.id : ''">{{ item.data }}</mat-option>
+                        <mat-option value="0">Select...</mat-option>
+                        <ng-container *ngFor="let item of databaseEngineers()">
+                            <mat-option *ngIf="item.data && item.id !== 'DEFAULT'" [value]="item.id">{{ item.data }}</mat-option>
+                        </ng-container>
                     </mat-select>
+                    <mat-error>Select a database engineer.</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblEngineeringPlatform>{{ engineeringPlatform().payload }}</mat-label>
                     <mat-select formControlName="engineeringPlatforms">
-                        <mat-option *ngFor="let item of engineeringPlatforms()" [value]="item.data ? item.id : ''">{{ item.data }}</mat-option>
+                        <mat-option value="0">Select...</mat-option>
+                        <ng-container *ngFor="let item of engineeringPlatforms()">
+                            <mat-option *ngIf="item.data && item.id !== 'DEFAULT'" [value]="item.id">{{ item.data }}</mat-option>
+                        </ng-container>
                     </mat-select>
+                    <mat-error>Select an engineering platform.</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblTemplate>{{ template().payload }}</mat-label>
                     <mat-select formControlName="templates">
-                        <mat-option *ngFor="let item of templates()" [value]="item.data ? item.id : ''">{{ item.data }}</mat-option>
+                        <mat-option value="0">Select...</mat-option>
+                        <ng-container *ngFor="let item of templates()">
+                            <mat-option *ngIf="item.data && item.id !== 'DEFAULT'" [value]="item.id">{{ item.data }}</mat-option>
+                        </ng-container>
                     </mat-select>
+                    <mat-error>Select a template.</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label [style.user-select]="'none'" #lblProjectTemplate>{{ projectTemplate().payload }}</mat-label>
                     <mat-select formControlName="projectTemplates">
-                        <mat-option *ngFor="let item of projectTemplates()" [value]="item.data ? item.id : ''">{{ item.data }}</mat-option>
+                        <mat-option value="0">Select...</mat-option>
+                        <ng-container *ngFor="let item of projectTemplates()">
+                            <mat-option *ngIf="item.data && item.id !== 'DEFAULT'" [value]="item.id">{{ item.data }}</mat-option>
+                        </ng-container>
                     </mat-select>
+                    <mat-error>Select a project template.</mat-error>
                 </mat-form-field>
             </div>
     </section>
 
     <div class="page-actions">
-        <button type="submit" mat-flat-button color="primary" [disabled]="frm.invalid">
+        <button type="submit" mat-flat-button color="primary">
             <mat-icon>check</mat-icon>
             <span>Submit</span>
         </button>
