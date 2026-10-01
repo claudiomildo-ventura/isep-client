@@ -1,74 +1,35 @@
-textarea {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    height: auto !important;
-}
-
-.space-x-10 {
-    display: flex;
-    gap: 10px;
-}
-
-@media (max-width: 768px) {
-    .hide-on-small {
-        display: none !important;
-    }
-}
-
-.table-responsive {
-    overflow-x: auto;
-}
-
-.table-title {
-    word-break: break-word;
-}
-
-.fields-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-    justify-items: center;
-}
-
-.field-card {
-    min-width: 280px;
-    max-width: 100%;
+.sql-field {
     width: 100%;
 }
 
-.field-card mat-card-header {
-    text-align: center;
+textarea {
+    min-height: 240px;
+    max-height: 520px;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    letter-spacing: 0;
+    resize: vertical;
 }
 
-.field-details {
+.selected-file {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
     align-items: center;
-    text-align: center;
+    gap: 8px;
+    color: var(--isep-muted);
+    font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
-.actions-bottom {
-    display: flex;
-    justify-content: center;
+.selected-file mat-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
 }
 
-@media (min-width: 576px) {
-    .fields-container {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    }
-}
-
-@media (min-width: 768px) {
-    .fields-container {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    }
-}
-
-@media (min-width: 992px) {
-    .fields-container {
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+@media (max-width: 600px) {
+    textarea {
+        font-size: 13px;
     }
 }

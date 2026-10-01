@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {ArchetypeService} from "src/app/core/services/archetype.service";
 import {MaterialModule} from "src/app/material.module";
 import {ApiResponse} from "src/app/shared/interface/ApiResponse";
@@ -19,8 +19,6 @@ export class PageEnterpriseComponent implements OnInit {
     public enterprise: Signal<ApiResponse<string>> = this._enterprise.asReadonly();
 
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
-
-    @ViewChild('lblEnterprise') lblEnterprise!: ElementRef<HTMLParagraphElement>;
 
     ngOnInit(): void {
         void this.setEnterprise();

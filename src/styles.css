@@ -1,13 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
-.footer {
-    width: 92%;
-    text-align: center;
-    position: absolute;
-    bottom: 1em;
+:root {
+    --isep-text: #25343b;
+    --isep-muted: #52636b;
+    --isep-border: #d8e2e7;
+    --isep-surface: #ffffff;
 }
 
-html, body { height: 100%; }
+html, body { min-height: 100%; }
 body {
     margin: 0;
     font-family: Roboto, Arial, sans-serif;
+    color: var(--isep-text);
+    background: linear-gradient(180deg, #eff5f8 0, #fafcfd 360px);
+    letter-spacing: 0;
+}
+
+.page-heading {
+    margin: 0 0 24px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+
+.page-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--isep-border);
+}
+
+.page-actions button {
+    min-height: 44px;
+    letter-spacing: 0;
+}
+
+@media (max-width: 600px) {
+    .page-heading {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
 }

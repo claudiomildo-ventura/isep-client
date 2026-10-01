@@ -1,6 +1,6 @@
 import {CommonModule} from "@angular/common";
-import {AfterViewInit, Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {ProgressBarComponent} from "src/app/components/progress-bar/progress-bar.component";
 import {ArchetypeService} from "src/app/core/services/archetype.service";
@@ -11,6 +11,10 @@ import {StringFunc} from 'src/app/shared/string-utils/StringFunc';
 import {Validator} from 'src/app/shared/validator/validator';
 import {TECHNICAL_LOGGER} from "src/config/technical-logger";
 import {ENVIRONMENT} from 'src/environments/environment';
+
+type PageHomeForm = FormGroup<{
+    detail: FormControl<string>;
+}>;
 
 @Component({
     selector: 'page-home',
@@ -24,20 +28,19 @@ import {ENVIRONMENT} from 'src/environments/environment';
     templateUrl: './page-home.component.html',
     styleUrls: ['./page-home.component.css', "../../../../styles/sass/_variables.scss"],
 })
-export class PageHomeComponent implements OnInit, AfterViewInit {
+export class PageHomeComponent implements OnInit {
     private readonly _detail: WritableSignal<ApiResponse<string>> = signal({payload: StringFunc.STRING_EMPTY});
     public detail: Signal<ApiResponse<string>> = this._detail.asReadonly();
 
-    public isPageLoading: boolean = true;
     public startValidation: boolean = false;
     public selectedFileName: string = StringFunc.STRING_EMPTY;
     public errorList: string[] = [];
 
     private readonly router: Router = inject(Router);
-    private readonly fb: FormBuilder = inject(FormBuilder);
+    private readonly fb: NonNullableFormBuilder = inject(NonNullableFormBuilder);
     private readonly archetypeService: ArchetypeService = inject(ArchetypeService);
 
-    public frm: FormGroup = this.fb.group({
+    public frm: PageHomeForm = this.fb.group({
         detail: [StringFunc.STRING_EMPTY,
             [
                 Validators.required,
@@ -53,11 +56,7 @@ export class PageHomeComponent implements OnInit, AfterViewInit {
         void this.detailInitialize();
     }
 
-    ngAfterViewInit(): void {
-        this.progressBarInitialize();
-    }
-
-    get detailControl(): AbstractControl<any, any> | null {
+    get detailControl(): AbstractControl<string> | null {
         return this.frm.get('detail');
     }
 
@@ -74,7 +73,7 @@ export class PageHomeComponent implements OnInit, AfterViewInit {
 
     public submit(): void {
         if (this.frm.valid) {
-            const detailValue: any = this.frm.getRawValue().detail;
+            const detailValue: string = this.frm.getRawValue().detail;
             this.navigateToPageStructure(StringFunc.encodeBase64(detailValue));
         } else {
             this.startValidation = true;
@@ -104,9 +103,4 @@ export class PageHomeComponent implements OnInit, AfterViewInit {
         this.frm.patchValue({detail: this.detail().payload});
     }
 
-    private progressBarInitialize(): void {
-        setTimeout((): void => {
-            this.isPageLoading = false;
-        }, 5000);
-    }
 }

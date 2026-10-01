@@ -1,9 +1,13 @@
-.table-responsive {
-    max-height: 70vh; /* or 500px */
-    overflow: auto;
+.app-footer {
+    padding: 20px 0;
+    border-top: 1px solid var(--isep-border);
+    color: var(--isep-muted);
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+    overflow-wrap: anywhere;
 }
 
-.mat-header-row {
-    background: white;
-    z-index: 1;
+p {
+    margin: 0 0 4px;
 }

@@ -1,6 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 import {HttpclientService} from './httpclient.service';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpContext} from '@angular/common/http';
 import {of} from 'rxjs';
 
 describe('HttpclientService', (): void => {
@@ -22,33 +22,22 @@ describe('HttpclientService', (): void => {
         expect(service).toBeTruthy();
     });
 
-    it('should call getData$ and return expected data', (): void => {
+    it('should call getMapping$ and return expected data', (): void => {
         const expectedData = {param: 'value'};
         httpClientSpy.get.and.returnValue(of(expectedData));
-        service.getData$('test-url').subscribe(data => {
-            // @ts-ignore
+        service.getMapping$<typeof expectedData>('test-url').subscribe((data: typeof expectedData): void => {
             expect(data).toEqual(expectedData);
         });
-        expect(httpClientSpy.get).toHaveBeenCalledWith('test-url', service.httpOptions);
+        expect(httpClientSpy.get).toHaveBeenCalledWith('test-url', jasmine.objectContaining({context: jasmine.any(HttpContext)}));
     });
 
-    it('should call sendData$ and return expected response', (): void => {
+    it('should call postMapping$ and return expected response', (): void => {
         const postData = {key: 'val'};
         const expectedResponse = {success: true};
         httpClientSpy.post.and.returnValue(of(expectedResponse));
-        service.sendData$('test-url', postData).subscribe(res => {
+        service.postMapping$<typeof expectedResponse>('test-url', postData).subscribe((res: typeof expectedResponse): void => {
             expect(res).toEqual(expectedResponse);
         });
-        expect(httpClientSpy.post).toHaveBeenCalledWith('test-url', postData, service.httpOptions);
-    });
-
-    it('should call getDataItems$ and return expected items', (): void => {
-        const expectedItems = [{id: 1}, {id: 2}];
-        httpClientSpy.get.and.returnValue(of(expectedItems));
-        service.getDataItems$('test-url').subscribe(items => {
-            // @ts-ignore
-            expect(items).toEqual(expectedItems);
-        });
-        expect(httpClientSpy.get).toHaveBeenCalledWith('test-url', service.httpOptions);
+        expect(httpClientSpy.post).toHaveBeenCalledWith('test-url', postData, jasmine.objectContaining({context: jasmine.any(HttpContext)}));
     });
 });

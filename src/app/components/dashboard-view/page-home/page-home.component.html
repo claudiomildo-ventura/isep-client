@@ -1,34 +1,29 @@
 <form [formGroup]="frm" (ngSubmit)="submit()">
-    <ng-container>
-        <mat-card>
-            <mat-card-content class="mat-elevation-z0">
+    <section aria-labelledby="import-heading">
+        <h2 id="import-heading" class="page-heading">Import SQL</h2>
+        <mat-form-field appearance="outline" class="sql-field" [style.user-select]="'none'">
+            <textarea
+                matInput
+                readonly
+                rows="14"
+                aria-label="SQL content"
+                formControlName="detail"
+            >{{ detail().payload }}</textarea>
+            <mat-error *ngIf="startValidation && errorMessage">{{ errorMessage }}</mat-error>
+        </mat-form-field>
+        <input #txtFile type="file" hidden (change)="onFileSelected($event)"/>
+        <div *ngIf="selectedFileName" class="selected-file">
+            <mat-icon aria-hidden="true">description</mat-icon>
+            <span>{{ selectedFileName }}</span>
+        </div>
+    </section>
 
-                <!-- Detail Textarea -->
-                <mat-form-field appearance="outline" class="w-100" [style.user-select]="'none'">
-                        <textarea
-                            matInput
-                            readonly
-                            rows="20"
-                            formControlName="detail"
-                        >{{ detail().payload }}</textarea>
-                    <mat-error *ngIf="startValidation && errorMessage">{{ errorMessage }}</mat-error>
-                </mat-form-field>
-
-                <!-- File input + Submit button row -->
-                <div class="d-flex flex-row justify-content-end">
-                    <input #txtFile type="file" hidden (change)="onFileSelected($event)"/>
-                </div>
-
-                <div>
-                    <span *ngIf="selectedFileName">{{ selectedFileName }}</span>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </ng-container>
-
-    <div class="d-flex flex-row justify-content-end mt-3 space-x-10">
-        <button type="button" mat-stroked-button color="accent" (click)="txtFile.click()">Choose File</button>
-        <button type="submit" mat-stroked-button color="accent">
+    <div class="page-actions">
+        <button type="button" mat-stroked-button (click)="txtFile.click()">
+            <mat-icon>upload_file</mat-icon>
+            Choose File
+        </button>
+        <button type="submit" mat-flat-button color="primary">
             <mat-icon>check</mat-icon>
             Submit
         </button>

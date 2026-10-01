@@ -1,5 +1,5 @@
 import {CommonModule} from "@angular/common";
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {MaterialModule} from "src/app/material.module";
 import {PROGRESS_BAR} from "src/config/progress-bar";
 
@@ -14,8 +14,14 @@ import {PROGRESS_BAR} from "src/config/progress-bar";
     styleUrl: './progress-bar.component.css'
 })
 export class ProgressBarComponent implements OnInit, OnDestroy {
-    public isPageLoading: boolean = true;
-    public progressValue: number = 0;
+    private static readonly loadingShownKey: string = 'isep.progress.loadingShown';
+
+    private readonly _isPageLoading: WritableSignal<boolean> = signal(false);
+    public isPageLoading: Signal<boolean> = this._isPageLoading.asReadonly();
+
+    private readonly _progressValue: WritableSignal<number> = signal(0);
+    public progressValue: Signal<number> = this._progressValue.asReadonly();
+
     private interval?: ReturnType<typeof setInterval>;
 
     ngOnInit(): void {
@@ -27,16 +33,32 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
     }
 
     private progressBarInitialize(): void {
+        if (sessionStorage.getItem(ProgressBarComponent.loadingShownKey)) {
+            return;
+        }
+
+        this._isPageLoading.set(true);
         this.progressBarLoadConfig();
     }
 
     private progressBarLoadConfig(): void {
         this.interval = setInterval((): void => {
-            if (this.progressValue < PROGRESS_BAR.progressMaxValue) {
-                this.progressValue += PROGRESS_BAR.progressIncrementValue;
-            } else {
-                clearInterval(this.interval);
-                this.isPageLoading = false;
+            const nextProgressValue: number = Math.min(
+                this._progressValue() + PROGRESS_BAR.progressIncrementValue,
+                PROGRESS_BAR.progressMaxValue
+            );
+
+            this._progressValue.set(nextProgressValue);
+
+            if (nextProgressValue === PROGRESS_BAR.progressMaxValue) {
+                this.progressBarDestroyConfig();
+                this._isPageLoading.set(false);
+
+                try {
+                    sessionStorage.setItem(ProgressBarComponent.loadingShownKey, 'true');
+                } catch {
+                    return;
+                }
             }
         }, PROGRESS_BAR.delay);
     }
@@ -44,6 +66,7 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
     private progressBarDestroyConfig(): void {
         if (this.interval) {
             clearInterval(this.interval);
+            this.interval = undefined;
         }
     }
 }

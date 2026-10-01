@@ -1,13 +1,97 @@
-# ISEP | Integrated Software Engineering Platform - frontend
+# ISEP | Integrated Software Engineering Platform - Client
 
----
+## Project Overview
 
-## 🧩 Project Overview
+ISEP Client is the Angular frontend for the Integrated Software Engineering Platform. The application provides the user interface for collecting project information, generating structure data, configuring parameters, and interacting with the orchestration backend through HTTP endpoints.
 
-This API service is a modernization effort of a legacy application originally developed in Object Pascal (Delphi XE10).
+The project is part of a modernization effort for a legacy application originally developed in Object Pascal (Delphi XE10).
 
-## 🛠 Technologies Used
+## Technologies Used
 
-The project incorporates a modern stack for front-end development and DevOps:
+[![Skills](https://skillicons.dev/icons?i=ts,angular,npm,docker,nginx,git,github,githubactions,md&theme=light)](https://skillicons.dev)
 
-[![Skills](https://skillicons.dev/icons?i=ai,webstorm,ts,angular,npm,kafka,git,github,githubactions,md&theme=light)](https://skillicons.dev)
+| Technology | Version / Usage |
+| --- | --- |
+| Angular | 21 |
+| TypeScript | 5.9 |
+| Angular Material | UI components |
+| RxJS | Reactive programming |
+| ngx-translate | Internationalization |
+| Karma and Jasmine | Unit testing |
+| Docker and NGINX | Containerized build and hosting |
+| GitHub Actions | CI/CD |
+
+## Project Structure
+
+```text
+src/
++-- app/
+|   +-- components/    Application pages and reusable UI components
+|   +-- core/          Services, interceptors, guards, and error routes
+|   +-- shared/        Interfaces, validators, pipes, constants, and utilities
++-- assets/            Static assets and runtime configuration files
++-- environments/      Environment-specific Angular configuration
+```
+
+## Backend Integration
+
+During local development, the Angular dev server uses `proxy.config.json` to forward requests from `/orchestrator/v1` to the backend running at `http://localhost:3001`.
+
+The main environment configuration is defined in `src/environments/environment.ts`.
+
+## Build and Run
+
+### Install Dependencies
+
+Use Node.js 24, matching the Docker build.
+
+```bash
+npm ci
+```
+
+### Run Locally
+
+```bash
+npm start
+```
+
+The application runs on `http://localhost:3000`.
+
+### Production Build
+
+```bash
+npm run build
+```
+
+## Testing
+
+```bash
+npm test
+```
+
+For a single headless run:
+
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless
+```
+
+On Windows without Chrome, use the installed Chromium-based Edge executable:
+
+```powershell
+$env:CHROME_BIN = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+npm test -- --watch=false --browsers=ChromeHeadless
+```
+
+Component tests mock backend requests and IndexedDB. Running backend services is not required.
+
+Parameter form tests cover the initial `0` selection, required-field messages without HTTP submission, resetting each parameter to an unselected state, textual enum IDs, the explicit API-only option, successful navigation and generation failures without false success messages. Valid selections continue to use enum names in API requests; `0` is only the unselected form state.
+
+## Docker
+
+Build and run the frontend container with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+The Docker image builds with Node.js 24 and `npm ci`, then serves `dist/angular-ecommerce/browser` with NGINX. Local dependencies, build output and caches are excluded from the Docker context. The home-page browser title is `CV IT - isep`, and the platform heading is centered.

@@ -7,7 +7,7 @@ export const ROUTES: Routes = [
         pathMatch: 'full'
     },
     {
-        title: 'CV IT - udp',
+        title: 'CV IT - isep',
         path: 'page-home',
         loadComponent: () =>
             import('./components/dashboard-view/page-home/page-home.component').then(m => m.PageHomeComponent)

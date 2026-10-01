@@ -1,6 +1,6 @@
 import {SelectionModel} from "@angular/cdk/collections";
 import {CommonModule} from "@angular/common";
-import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
@@ -31,10 +31,15 @@ import {ENVIRONMENT} from "src/environments/environment";
 })
 export class PageStructureComponent implements OnInit, AfterViewInit {
     private detailContent: unknown;
-    public isPageLoading: boolean = true;
-    public tables: any[] = [];
+    private readonly _isPageLoading: WritableSignal<boolean> = signal(true);
+    public isPageLoading: Signal<boolean> = this._isPageLoading.asReadonly();
+
+    private readonly _canSubmit: WritableSignal<boolean> = signal(false);
+    public canSubmit: Signal<boolean> = this._canSubmit.asReadonly();
+
+    public tables: Table[] = [];
     public dtsTablesCols: string[] = ['fields'];
-    public dtsTables: MatTableDataSource<any> = new MatTableDataSource<any>();
+    public dtsTables: MatTableDataSource<Table> = new MatTableDataSource<Table>();
     public selectionModel: SelectionModel<Field> = new SelectionModel<Field>(true, []);
 
     private readonly fb: FormBuilder = inject(FormBuilder);
@@ -48,29 +53,31 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.getDetailFromDashboardForm();
+        void this.pageLoadInitialize();
     }
 
     ngAfterViewInit(): void {
-        this.progressBarInitialize();
-        void this.clearData();
+        this.dataSourceSort();
     }
 
-    public submit(): void {
+    public async submit(): Promise<void> {
         if (this.frm.invalid || this.selectionModel.selected.length === 0) return;
 
-        const tablesWithFields: Table[] = this.getAllTablesWithFieldsFromStructureForm()
-        void this.saveData(tablesWithFields);
-        this.navigateToPageParameter();
+        const tablesWithFields: Table[] = this.getAllTablesWithFieldsFromStructureForm();
+        await this.saveData(tablesWithFields);
+        await this.navigateToPageParameter();
     }
 
     public toggleRow(field: Field): void {
         this.selectionModel.toggle(field);
+        this.updateCanSubmit();
     }
 
     public toggleAllCheckboxes(table: Table): void {
         this.areAllCheckboxesSelected(table)
             ? table.fields.forEach((f: Field): boolean | void => this.selectionModel.deselect(f))
             : table.fields.forEach((f: Field): boolean | void => this.selectionModel.select(f));
+        this.updateCanSubmit();
     }
 
     public areAllCheckboxesSelected(table: Table): boolean {
@@ -114,11 +121,13 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
 
     private dtsTablesInitialize(tables: Table[]): void {
         this.tables = tables;
-        this.dtsTables = new MatTableDataSource<Table>(this.tables);
+        this.dtsTables.data = this.tables;
     }
 
     private dataSourceSort(): void {
-        this.dtsTables.sort = this.sort;
+        if (this.sort) {
+            this.dtsTables.sort = this.sort;
+        }
     }
 
     private formShow(tablesResponse: TableResponse): void {
@@ -127,11 +136,23 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
         this.selectingAllCheckboxesOnLoad();
     }
 
-    private progressBarInitialize(): void {
-        setTimeout((): void => {
-            void this.dataPost();
-            this.isPageLoading = false;
-        }, 1000);
+    private async pageLoadInitialize(): Promise<void> {
+        this._isPageLoading.set(true);
+        this._canSubmit.set(false);
+
+        try {
+            await this.clearData();
+            await this.dataPost();
+        } finally {
+            setTimeout((): void => {
+                this._isPageLoading.set(false);
+                this.updateCanSubmit();
+            });
+        }
+    }
+
+    private updateCanSubmit(): void {
+        this._canSubmit.set(!this._isPageLoading() && this.selectionModel.selected.length > 0);
     }
 
     private getAllTablesWithFieldsFromStructureForm(): Table[] {
@@ -143,8 +164,8 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
             .filter(table => table.fields.length > 0);
     }
 
-    private navigateToPageParameter(): void {
-        this.router.navigate(['/page-parameter'], {}).then(success => TECHNICAL_LOGGER.info(`Navigation result: ${success}`));
+    private async navigateToPageParameter(): Promise<void> {
+        await this.router.navigate(['/page-parameter'], {}).then(success => TECHNICAL_LOGGER.info(`Navigation result: ${success}`));
     }
 
     private async dataPost(): Promise<void> {
@@ -155,11 +176,12 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
         this.formShow(response);
     }
 
-    private async saveData(columns: any): Promise<void> {
+    private async saveData(columns: Table[]): Promise<void> {
         try {
             await this.indexedDbService.saveData(columns);
         } catch (err) {
-            console.error(err);
+            TECHNICAL_LOGGER.error(err);
+            throw err;
         }
     }
 
@@ -167,7 +189,7 @@ export class PageStructureComponent implements OnInit, AfterViewInit {
         try {
             await this.indexedDbService.clearData();
         } catch (err) {
-            console.error(err);
+            TECHNICAL_LOGGER.error(err);
         }
     }
 }
